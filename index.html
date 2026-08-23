@@ -68,11 +68,14 @@
     text-align: center;
     z-index: 20;
     opacity: 0;
-    transition: opacity 1.4s ease;
+    visibility: hidden;
+    transition: opacity 1.4s ease, visibility 0s linear 1.4s;
     pointer-events: none;
   }
   .center-msg.show{
     opacity: 1;
+    visibility: visible;
+    transition: opacity 1.4s ease, visibility 0s linear 0s;
   }
   .center-msg h1{
     font-family: 'Cormorant Garamond', Georgia, serif;
@@ -201,10 +204,14 @@ function playSpin(){
   centerMsg.classList.remove('show');
   buildSpiral();
 
-  lineIndex = (lineIndex + 1) % closingLines.length;
-  centerLine.textContent = closingLines[lineIndex];
-
   clearTimeout(window._centerTimer);
+  clearTimeout(window._textTimer);
+
+  window._textTimer = setTimeout(() => {
+    lineIndex = (lineIndex + 1) % closingLines.length;
+    centerLine.textContent = closingLines[lineIndex];
+  }, 1500);
+
   window._centerTimer = setTimeout(() => {
     centerMsg.classList.add('show');
   }, 14500);
