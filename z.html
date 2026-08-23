@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>for Boipelo</title>
+<style>
+  :root{
+    --bg: #0d1526;
+    --gold: #7fb8f0;
+    --cream: #eaf2fb;
+    --glow: #4a9de8;
+    --muted: #6f8db3;
+  }
+  *{ box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body{
+    margin:0; padding:0; height:100%;
+    background: radial-gradient(ellipse at 50% 50%, #16233d, var(--bg) 75%);
+    overflow: hidden;
+    font-family: -apple-system, sans-serif;
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration: 0.01ms !important; }
+  }
+
+  .stage{
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .spiral{
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+
+  .word{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-style: italic;
+    font-weight: 600;
+    color: var(--gold);
+    white-space: nowrap;
+    transform-origin: center;
+    opacity: 0;
+    animation-name: spiralIn;
+    animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+    animation-fill-mode: forwards;
+  }
+
+  @keyframes spiralIn{
+    from{ opacity: 0; transform: translate(-50%, -50%) scale(0.3); }
+    to{ opacity: var(--endOpacity); transform: var(--finalTransform); }
+  }
+
+  .center-msg{
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    z-index: 20;
+    opacity: 0;
+    animation: fadeInCenter 1.4s ease forwards;
+    animation-delay: 14.5s;
+    pointer-events: none;
+  }
+  @keyframes fadeInCenter{
+    to{ opacity: 1; }
+  }
+  .center-msg h1{
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-style: italic;
+    font-weight: 600;
+    font-size: clamp(30px, 9vw, 48px);
+    color: var(--glow);
+    margin: 0;
+    text-shadow: 0 0 30px rgba(74,157,232,0.5);
+  }
+  .center-msg p{
+    color: var(--cream);
+    font-size: 13px;
+    letter-spacing: 1px;
+    margin-top: 10px;
+    opacity: 0.75;
+  }
+
+  .tap-hint{
+    position: absolute;
+    bottom: 26px;
+    left: 0; right: 0;
+    text-align: center;
+    color: var(--muted);
+    font-size: 12px;
+    letter-spacing: 1px;
+    opacity: 0;
+    animation: fadeInCenter 1s ease forwards;
+    animation-delay: 15.5s;
+  }
+</style>
+</head>
+<body>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;1,600&display=swap" rel="stylesheet">
+
+<div class="stage">
+  <div class="spiral" id="spiral"></div>
+  <div class="center-msg">
+    <h1>Boipelo 😛❤️</h1>
+    <p>— Ntsako</p>
+  </div>
+  <div class="tap-hint">tap anywhere to spin it again</div>
+</div>
+
+<script>
+const spiral = document.getElementById('spiral');
+const phrase = "I love you 😛❤️ ";
+const REPEATS = 60;
+const text = phrase.repeat(REPEATS);
+const chars = text.split('');
+
+function buildSpiral(){
+  spiral.innerHTML = '';
+  const centerX = spiral.clientWidth / 2;
+  const centerY = spiral.clientHeight / 2;
+  const maxRadius = Math.min(spiral.clientWidth, spiral.clientHeight) * 0.46;
+  const turns = 10;
+  const totalChars = chars.length;
+  const totalDuration = 14;
+
+  chars.forEach((ch, i) => {
+    if(ch === ' ') return;
+    const t = i / totalChars;
+    const angle = t * turns * Math.PI * 2;
+    const radius = t * maxRadius;
+    const x = centerX + radius * Math.cos(angle);
+    const y = centerY + radius * Math.sin(angle);
+    const rotationDeg = (angle * 180 / Math.PI) + 90;
+
+    const span = document.createElement('span');
+    span.className = 'word';
+    span.textContent = ch;
+    const fontSize = 10 + (1 - t) * 8;
+    const opacity = 0.4 + t * 0.6;
+    span.style.left = x + 'px';
+    span.style.top = y + 'px';
+    span.style.fontSize = fontSize + 'px';
+    span.style.setProperty('--endOpacity', opacity.toFixed(2));
+    span.style.transform = `translate(-50%, -50%) rotate(${rotationDeg}deg) scale(0.3)`;
+    span.style.setProperty('--finalTransform', `translate(-50%, -50%) rotate(${rotationDeg}deg) scale(1)`);
+    span.style.animationDuration = '0.9s';
+    span.style.animationDelay = (t * totalDuration) + 's';
+    spiral.appendChild(span);
+  });
+}
+
+buildSpiral();
+window.addEventListener('resize', buildSpiral);
+document.body.addEventListener('click', buildSpiral);
+</script>
+
+</body>
+</html>
