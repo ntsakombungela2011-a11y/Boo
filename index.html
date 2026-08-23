@@ -68,12 +68,11 @@
     text-align: center;
     z-index: 20;
     opacity: 0;
-    animation: fadeInCenter 1.4s ease forwards;
-    animation-delay: 14.5s;
+    transition: opacity 1.4s ease;
     pointer-events: none;
   }
-  @keyframes fadeInCenter{
-    to{ opacity: 1; }
+  .center-msg.show{
+    opacity: 1;
   }
   .center-msg h1{
     font-family: 'Cormorant Garamond', Georgia, serif;
@@ -102,8 +101,11 @@
     font-size: 12px;
     letter-spacing: 1px;
     opacity: 0;
-    animation: fadeInCenter 1s ease forwards;
+    animation: fadeInHint 1s ease forwards;
     animation-delay: 15.5s;
+  }
+  @keyframes fadeInHint{
+    to{ opacity: 1; }
   }
 </style>
 </head>
@@ -114,8 +116,8 @@
 
 <div class="stage">
   <div class="spiral" id="spiral"></div>
-  <div class="center-msg">
-    <h1>I love you so much Boipelo ❤️</h1>
+  <div class="center-msg" id="centerMsg">
+    <h1 id="centerLine">I love you, Boipelo ❤️</h1>
     <p>— Ntsako</p>
   </div>
   <div class="tap-hint">tap anywhere to spin it again</div>
@@ -123,10 +125,43 @@
 
 <script>
 const spiral = document.getElementById('spiral');
+const centerMsg = document.getElementById('centerMsg');
+const centerLine = document.getElementById('centerLine');
 const phrase = "I love you ❤️ ";
 const REPEATS = 60;
 const text = phrase.repeat(REPEATS);
 const chars = text.split('');
+const totalDuration = 14;
+
+const closingLines = [
+  "I love you, Boipelo ❤️",
+  "I love you more, Boipelo ❤️",
+  "I love you even more, Boipelo ❤️",
+  "I love you so much more, Boipelo ❤️",
+  "I love you more than words, Boipelo ❤️",
+  "I love you more every single day, Boipelo ❤️",
+  "I love you more than yesterday, Boipelo ❤️",
+  "I love you more than you know, Boipelo ❤️",
+  "I love you a little more, Boipelo ❤️",
+  "I love you endlessly, Boipelo ❤️",
+  "I love you more than ever, Boipelo ❤️",
+  "I love you deeper than before, Boipelo ❤️",
+  "I love you more with every spin, Boipelo ❤️",
+  "I love you beyond words, Boipelo ❤️",
+  "I love you more and more, Boipelo ❤️",
+  "I love you infinitely, Boipelo ❤️",
+  "I love you more than the last time, Boipelo ❤️",
+  "I love you completely, Boipelo ❤️",
+  "I love you more than I show, Boipelo ❤️",
+  "I love you without limit, Boipelo ❤️",
+  "I love you more than anything, Boipelo ❤️",
+  "I love you always and forever, Boipelo ❤️",
+  "I love you more than the stars, Boipelo ❤️",
+  "I love you more than time itself, Boipelo ❤️",
+  "I love you, still and always, Boipelo ❤️",
+  "I love you more than words can hold, Boipelo ❤️"
+];
+let lineIndex = 0;
 
 function buildSpiral(){
   spiral.innerHTML = '';
@@ -135,7 +170,6 @@ function buildSpiral(){
   const maxRadius = Math.min(spiral.clientWidth, spiral.clientHeight) * 0.46;
   const turns = 10;
   const totalChars = chars.length;
-  const totalDuration = 14;
 
   chars.forEach((ch, i) => {
     if(ch === ' ') return;
@@ -163,9 +197,22 @@ function buildSpiral(){
   });
 }
 
-buildSpiral();
+function playSpin(){
+  centerMsg.classList.remove('show');
+  buildSpiral();
+
+  lineIndex = (lineIndex + 1) % closingLines.length;
+  centerLine.textContent = closingLines[lineIndex];
+
+  clearTimeout(window._centerTimer);
+  window._centerTimer = setTimeout(() => {
+    centerMsg.classList.add('show');
+  }, 14500);
+}
+
+playSpin();
 window.addEventListener('resize', buildSpiral);
-document.body.addEventListener('click', buildSpiral);
+document.body.addEventListener('click', playSpin);
 </script>
 
 </body>
