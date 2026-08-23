@@ -63,6 +63,8 @@
     position: absolute;
     top: 50%; left: 50%;
     transform: translate(-50%, -50%);
+    width: 88%;
+    max-width: 340px;
     text-align: center;
     z-index: 20;
     opacity: 0;
@@ -77,9 +79,10 @@
     font-family: 'Cormorant Garamond', Georgia, serif;
     font-style: italic;
     font-weight: 600;
-    font-size: clamp(30px, 9vw, 48px);
+    font-size: clamp(24px, 7.5vw, 40px);
     color: var(--glow);
     margin: 0;
+    line-height: 1.25;
     text-shadow: 0 0 30px rgba(74,157,232,0.5);
   }
   .center-msg p{
@@ -112,7 +115,7 @@
 <div class="stage">
   <div class="spiral" id="spiral"></div>
   <div class="center-msg">
-    <h1>Boipelo 😛❤️</h1>
+    <h1>I love you so much Boipelo ❤️</h1>
     <p>— Ntsako</p>
   </div>
   <div class="tap-hint">tap anywhere to spin it again</div>
@@ -120,7 +123,7 @@
 
 <script>
 const spiral = document.getElementById('spiral');
-const phrase = "I love you 😛❤️ ";
+const phrase = "I love you ❤️ ";
 const REPEATS = 60;
 const text = phrase.repeat(REPEATS);
 const chars = text.split('');
@@ -146,7 +149,7 @@ function buildSpiral(){
     const span = document.createElement('span');
     span.className = 'word';
     span.textContent = ch;
-    const fontSize = 10 + (1 - t) * 8;
+    const fontSize = 14 + (1 - t) * 12;
     const opacity = 0.4 + t * 0.6;
     span.style.left = x + 'px';
     span.style.top = y + 'px';
